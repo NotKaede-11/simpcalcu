@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Interest Calculator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+      <div class="loading-content">
+        <video autoplay muted class="loading-video">
+          <source src="loading.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div class="loading-bar-container">
+          <div class="loading-bar">
+            <div class="loading-bar-fill"></div>
+          </div>
+          <p class="loading-text">Loading Calculator...</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Bento 1: Info -->
+      <div class="bento-info">
+        <div class="info-header">
+          <span class="info-icon">💰</span>
+          <div>
+            <h1>Interest Calculator</h1>
+            <div class="subtitle">
+              PROGRAMMERS: [Member 1 Name], [Member 2 Name]
+            </div>
+          </div>
+        </div>
+
+        <div class="formula" id="formulaDisplay">A = P(1 + rt)</div>
+
+        <div class="info-description">
+          <p><strong>Calculate Simple & Compound Interest</strong></p>
+          <p>
+            Enter your principal amount, interest rate, time period, and
+            compounding frequency to see how your investment grows over time.
+          </p>
+        </div>
+      </div>
+
+      <!-- Bento 2: Input -->
+      <div class="bento-input">
+        <div class="input-header">
+          <h2>📝 Input Values</h2>
+          <p class="input-hint">
+            Fill in the details below to calculate your interest
+          </p>
+        </div>
+
+        <form id="calculatorForm">
+          <div class="form-group">
+            <label for="principal">
+              Principal Amount (P)
+              <span class="hint">Initial amount invested</span>
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="principal"
+                name="principal"
+                step="0.01"
+                min="0"
+                placeholder="e.g., 1000"
+                required
+              />
+              <span class="input-suffix">$</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="rate">
+              Interest Rate (r)
+              <span class="hint">Annual interest rate</span>
+            </label>
+            <div class="input-with-toggle">
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="rate"
+                  name="rate"
+                  step="0.01"
+                  min="0"
+                  placeholder="e.g., 5"
+                  required
+                />
+                <span class="input-suffix" id="rateSuffix">%</span>
+              </div>
+              <button
+                type="button"
+                class="percentage-toggle active"
+                id="percentageToggle"
+              >
+                % Mode
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="time">
+              Time Period (t)
+              <span class="hint">Investment duration</span>
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="time"
+                name="time"
+                step="0.1"
+                min="0"
+                placeholder="e.g., 2"
+                required
+              />
+              <span class="input-suffix">years</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="compounding">
+              Compounding Period
+              <span class="hint">How often interest is calculated</span>
+            </label>
+            <select id="compounding" name="compounding" required>
+              <option value="0">Simple Interest (No Compounding)</option>
+              <option value="1">Annual (Once per year)</option>
+              <option value="2">Semi-Annual (Twice per year)</option>
+              <option value="4">Quarterly (4 times per year)</option>
+              <option value="12">Monthly (12 times per year)</option>
+            </select>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn-calculate">Calculate</button>
+            <button type="button" class="btn-clear" onclick="clearForm()">
+              Clear
+            </button>
+          </div>
+        </form>
+
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <p style="margin-top: 10px">Calculating...</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+      </div>
+
+      <!-- Bento 3: Output -->
+      <div class="bento-output">
+        <div class="output-header">
+          <h2>📊 Results</h2>
+          <p class="output-hint">Your calculation results will appear here</p>
+        </div>
+
+        <div class="result-container" id="resultContainer">
+          <div class="result-empty" id="resultEmpty">
+            <div class="empty-icon">📈</div>
+            <p>Calculate your interest to see results</p>
+          </div>
+
+          <div class="result-content" id="resultContent" style="display: none">
+            <div class="result-summary">
+              <div class="summary-label">Total Amount</div>
+              <div class="summary-value" id="resultAmountLarge">$0.00</div>
+            </div>
+
+            <div class="result-breakdown">
+              <div class="breakdown-title">Breakdown</div>
+
+              <div class="result-item">
+                <span class="result-label">Principal Amount:</span>
+                <span class="result-value" id="resultPrincipal">$0.00</span>
+              </div>
+              <div class="result-item">
+                <span class="result-label">Interest Rate:</span>
+                <span class="result-value" id="resultRate">0%</span>
+              </div>
+              <div class="result-item">
+                <span class="result-label">Time Period:</span>
+                <span class="result-value" id="resultTime">0 years</span>
+              </div>
+              <div class="result-item">
+                <span class="result-label">Compounding:</span>
+                <span class="result-value" id="resultCompounding">Simple</span>
+              </div>
+              <div class="result-item highlight">
+                <span class="result-label">Interest Earned:</span>
+                <span class="result-value" id="resultInterest">$0.00</span>
+              </div>
+            </div>
+
+            <div class="result-visual">
+              <div class="visual-title">Principal vs Interest</div>
+              <div class="visual-bar">
+                <div
+                  class="visual-principal"
+                  id="visualPrincipal"
+                  style="width: 50%"
+                >
+                  <span>Principal</span>
+                </div>
+                <div
+                  class="visual-interest"
+                  id="visualInterest"
+                  style="width: 50%"
+                >
+                  <span>Interest</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          Powered by C++ Backend Server | Running on localhost:8080
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
