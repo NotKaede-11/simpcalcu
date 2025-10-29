@@ -306,11 +306,8 @@ select {
 /* Number input spinner arrows - Dark Mode */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-  opacity: 1;
-  background-color: #000;
-  border-radius: 4px;
-  cursor: pointer;
   filter: invert(1);
+  opacity: 1;
 }
 
 /* Add padding for inputs with suffix */
