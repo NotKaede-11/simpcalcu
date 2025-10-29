@@ -49,66 +49,6 @@ body {
   left: 0;
 }
 
-.loading-bar-container {
-  position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 500px;
-  max-width: 80vw;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: center;
-  z-index: 10;
-}
-
-.loading-bar {
-  width: 100%;
-  height: 8px;
-  background: rgba(26, 26, 26, 0.8);
-  backdrop-filter: blur(10px);
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(198, 122, 61, 0.3);
-}
-
-.loading-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #2878eb 0%, #227c3d 100%);
-  border-radius: 4px;
-  animation: loading-progress 5s ease-in-out forwards;
-  box-shadow: 0 0 20px rgba(198, 122, 61, 0.8);
-}
-
-@keyframes loading-progress {
-  0% {
-    width: 0%;
-  }
-  100% {
-    width: 100%;
-  }
-}
-
-.loading-text {
-  color: #fff;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin: 0;
-  text-shadow: 
-    0 0 10px rgba(198, 122, 61, 0.8),
-    0 0 20px rgba(198, 122, 61, 0.6),
-    0 2px 4px rgba(0, 0, 0, 0.8);
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(5px);
-  padding: 12px 24px;
-  border-radius: 8px;
-  border: 1px solid rgba(198, 122, 61, 0.3);
-}
-
 /* Site Header (Separate from Calculator) */
 .site-header {
   background: #2a2a2a;
@@ -792,7 +732,7 @@ button {
   }
 }
 
-/* Schedule Tab Styles */
+/* Schedule Tab Style */
 .schedule-header,
 .chart-header {
   margin-bottom: 20px;
