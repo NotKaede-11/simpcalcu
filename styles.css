@@ -18,7 +18,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #0a0a0a;
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,20 +33,16 @@ body {
 
 .loading-content {
   position: relative;
-  width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .loading-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
+  width: 750px;
+  height: 750px;
+  object-fit: contain;
+  border-radius: 20px;
 }
 
 /* Site Header (Separate from Calculator) */
@@ -307,6 +303,16 @@ select {
   color: #fff;
 }
 
+/* Number input spinner arrows - Dark Mode */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+  background-color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  filter: invert(1);
+}
+
 /* Add padding for inputs with suffix */
 #principal,
 #rate {
@@ -347,27 +353,20 @@ input.input-invalid {
 }
 
 .percentage-toggle {
-  background: linear-gradient(135deg, #2878eb 0%, #227c3d 100%);
+  background: #2878eb;
   border-radius: 8px;
   padding: 12px 20px;
   cursor: pointer;
-  transition: all 0.3s;
   font-weight: 600;
   font-size: 14px;
-  color: #1a1a1a;
+  color: #fff;
   white-space: nowrap;
   user-select: none;
 }
 
-.percentage-toggle:hover {
-  background: linear-gradient(135deg, #227c3d 0%, #e09d63 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(198, 122, 61, 0.3);
-}
-
 .percentage-toggle.active {
-  background: linear-gradient(135deg, #2878eb 0%, #227c3d 100%);
-  color: #1a1a1a;
+  background: #2878eb;
+  color: #fff;
 }
 
 .time-unit-select {
@@ -427,15 +426,9 @@ button {
 }
 
 .btn-calculate {
-  background: linear-gradient(135deg, #2878eb 0%, #227c3d 100%);
-  color: #1a1a1a;
+  background: #227c3d;
+  color: #fff;
   font-weight: 700;
-}
-
-.btn-calculate:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(198, 122, 61, 0.3);
-  background: linear-gradient(135deg, #227c3d 0%, #2878eb 100%);
 }
 
 .btn-clear {
@@ -621,16 +614,16 @@ button {
 }
 
 .result-visual {
-  background: #1f1f1f;
+  background: #fff;
   border-radius: 12px;
   padding: 20px;
-  border: 2px solid #2a2a2a;
+  border: 2px solid #e5e5e5;
 }
 
 .visual-title {
   font-size: 14px;
   font-weight: 600;
-  color: #aaa;
+  color: #1a1a1a;
   margin-bottom: 12px;
   text-align: center;
 }
@@ -640,7 +633,7 @@ button {
   height: 60px;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .visual-principal,
@@ -648,7 +641,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1a1a1a;
+  color: #fff;
   font-weight: 600;
   font-size: 14px;
   transition: all 0.5s ease;
@@ -1872,21 +1865,41 @@ body.light-mode .formula-text {
   color: #666;
 }
 
+body.light-mode .formula {
+  background: #fff;
+  border-color: #e5e5e5;
+  color: #1a1a1a;
+}
+
 body.light-mode input,
 body.light-mode select {
-  background: #f9f9f9;
+  background: #fff;
+  border-color: #e5e5e5;
+  color: #1a1a1a;
+}
+
+body.light-mode input[type="number"]::-webkit-inner-spin-button,
+body.light-mode input[type="number"]::-webkit-outer-spin-button {
+  background-color: transparent;
+  filter: none;
+}
+
+body.light-mode .time-unit-select:hover {
+  background: #fff;
   border-color: #e5e5e5;
   color: #1a1a1a;
 }
 
 body.light-mode .result-tab {
-  background: #f9f9f9;
+  background: #fff;
   color: #666;
+  border: 1px solid #e5e5e5;
 }
 
 body.light-mode .result-tab.active {
   background: #10b981;
   color: #fff;
+  border-color: #10b981;
 }
 
 body.light-mode .history-popover,
@@ -1912,7 +1925,7 @@ body.light-mode .presets-close:hover {
 
 body.light-mode .history-item,
 body.light-mode .preset-card {
-  background: #f9f9f9;
+  background: #fff;
   border-color: #e5e5e5;
 }
 
@@ -1931,7 +1944,8 @@ body.light-mode .preset-values {
 }
 
 body.light-mode .preset-card:hover {
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(16, 185, 129, 0.05);
+  border-color: #10b981;
 }
 
 body.light-mode .brand-tagline {
@@ -1945,7 +1959,7 @@ body.light-mode .result-content {
 }
 
 body.light-mode .breakdown-section {
-  background: #f9f9f9;
+  background: #fff;
   border-color: #e5e5e5;
 }
 
@@ -1959,7 +1973,7 @@ body.light-mode .breakdown-item .value {
 }
 
 body.light-mode .interest-highlight {
-  background: rgba(16, 185, 129, 0.1);
+  background: #fff;
   border-color: #10b981;
 }
 
@@ -1968,7 +1982,7 @@ body.light-mode .interest-highlight .value {
 }
 
 body.light-mode .chart-section {
-  background: #f9f9f9;
+  background: #fff;
   border-color: #e5e5e5;
 }
 
@@ -1977,7 +1991,7 @@ body.light-mode .chart-section h3 {
 }
 
 body.light-mode .schedule-section {
-  background: #f9f9f9;
+  background: #fff;
   border-color: #e5e5e5;
 }
 
@@ -1992,7 +2006,7 @@ body.light-mode .schedule-table {
 }
 
 body.light-mode .schedule-table thead {
-  background: #f5f5f5;
+  background: #fff;
   border-color: #e5e5e5;
 }
 
@@ -2006,11 +2020,12 @@ body.light-mode .schedule-table td {
 }
 
 body.light-mode .schedule-table tbody tr:hover {
-  background: #f9f9f9;
+  background: rgba(16, 185, 129, 0.05);
 }
 
 body.light-mode .total-amount-card {
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  background: #fff;
+  border: 2px solid #10b981;
 }
 
 body.light-mode .chart-legend {
@@ -2018,8 +2033,17 @@ body.light-mode .chart-legend {
 }
 
 body.light-mode .result-summary {
-  background: linear-gradient(135deg, #2878eb 0%, #227c3d 100%);
-  color: #1a1a1a;
+  background: #fff;
+  color: #10b981;
+  border: 2px solid #10b981;
+}
+
+body.light-mode .result-summary .summary-label {
+  color: #666;
+}
+
+body.light-mode .result-summary .summary-value {
+  color: #10b981;
 }
 
 body.light-mode .result-breakdown {
@@ -2033,8 +2057,8 @@ body.light-mode .result-item {
 }
 
 body.light-mode .result-item.highlight {
-  background: #f9f9f9;
-  border-color: #2878eb;
+  background: #fff;
+  border-color: #10b981;
 }
 
 body.light-mode .chart-container {

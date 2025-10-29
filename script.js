@@ -191,6 +191,11 @@ function loadFromHistory(id) {
   showInputError('principal', '');
   showInputError('rate', '');
   showInputError('time', '');
+  
+  // Automatically recalculate with the loaded values
+  setTimeout(() => {
+    form.dispatchEvent(new Event('submit'));
+  }, 100);
 }
 
 // Custom confirm function
