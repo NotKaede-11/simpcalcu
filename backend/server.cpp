@@ -32,7 +32,8 @@ std::string readFile(const std::string &filename);
 void handleRequest(SOCKET clientSocket, const std::string &request);
 std::string urlDecode(const std::string &str);
 
-const int PORT = 8080;
+const int START_PORT = 5500;
+const int END_PORT = 8080;
 
 int main()
 {
@@ -40,6 +41,7 @@ int main()
   SOCKET serverSocket, clientSocket;
   struct sockaddr_in serverAddr, clientAddr;
   int clientAddrLen = sizeof(clientAddr);
+  int actualPort = -1;
 
   // Initialize Winsock
   if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
@@ -60,12 +62,24 @@ int main()
   // Setup server address
   serverAddr.sin_family = AF_INET;
   serverAddr.sin_addr.s_addr = INADDR_ANY;
-  serverAddr.sin_port = htons(PORT);
 
-  // Bind socket
-  if (bind(serverSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+  // Try to bind to a port in the range
+  bool bound = false;
+  for (int port = START_PORT; port <= END_PORT; port++)
   {
-    std::cerr << "Bind failed\n";
+    serverAddr.sin_port = htons(port);
+    if (bind(serverSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) != SOCKET_ERROR)
+    {
+      actualPort = port;
+      bound = true;
+      break;
+    }
+  }
+
+  if (!bound)
+  {
+    std::cerr << "Failed to bind to any port in range " << START_PORT << "-" << END_PORT << "\n";
+    std::cerr << "All ports may be in use. Please close other applications and try again.\n";
     closesocket(serverSocket);
     WSACleanup();
     return 1;
@@ -83,7 +97,7 @@ int main()
   std::cout << "========================================\n";
   std::cout << "Simple Interest Calculator Server\n";
   std::cout << "========================================\n";
-  std::cout << "Server running on http://localhost:" << PORT << "\n";
+  std::cout << "Server running on http://localhost:" << actualPort << "\n";
   std::cout << "Open your browser and navigate to the URL above\n";
   std::cout << "Press Ctrl+C to stop the server\n";
   std::cout << "========================================\n\n";

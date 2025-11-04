@@ -141,13 +141,13 @@ Press Ctrl+C to stop the server
 ========================================
 ```
 
+**Note:** The server automatically tries ports 5500-8080. If a port is in use, it will use the next available port and display it in the message above.
+
 ### Step 3: Access the Application
 
-Open your web browser and navigate to:
+Open your web browser and navigate to the URL shown in the server output (usually `http://localhost:8080`).
 
-```
-http://localhost:8080
-```
+If a different port was used, the server will tell you which port to use.
 
 ## 📁 Project Files
 
@@ -215,9 +215,10 @@ The application validates:
 - **Language**: C++ (Standard C++11 or higher)
 - **Networking**: Winsock2 (Windows Sockets API)
 - **Server Type**: HTTP/1.1
-- **Port**: 8080
+- **Port Range**: 5500-8080 (automatic selection)
 - **API Endpoint**: `/api/calculate` (POST)
 - **Response Format**: JSON
+- **Port Management**: Automatically finds available port to avoid conflicts
 
 ### Frontend Technologies
 
@@ -256,15 +257,18 @@ Browser ← JSON Response ← Format Results with Schedule
 
 ## 🔧 Troubleshooting
 
-### Server won't start
+### Server won't start - All ports in use
 
-- **Issue**: Port 8080 already in use
-- **Solution**: Close any application using port 8080, or modify `PORT` constant in `server.cpp`
+- **Issue**: "Failed to bind to any port in range 5500-8080"
+- **Solution**: The server tries ports 5500-8080 automatically. If all are in use, close applications using these ports or wait a moment and try again.
 
 ### Can't access in browser
 
 - **Issue**: Browser can't connect
-- **Solution**: Ensure server is running and try `http://127.0.0.1:8080`
+- **Solution**:
+  1. Check the console output for the actual port being used
+  2. Make sure to use the correct URL (e.g., `http://localhost:8082` if port 8082 was used)
+  3. Try `http://127.0.0.1:[PORT]` instead of localhost
 
 ### Compilation errors
 
