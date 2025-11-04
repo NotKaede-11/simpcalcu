@@ -64,18 +64,63 @@ Where:
 
 ## 🚀 How to Compile and Run
 
+### Prerequisites: Installing a C++ Compiler
+
+Before you can compile the server, you need a C++ compiler installed on your system.
+
+#### Option 1: MinGW-w64 (Recommended for Windows)
+
+1. **Download MinGW-w64:**
+
+   - Visit [https://www.mingw-w64.org/downloads/](https://www.mingw-w64.org/downloads/)
+   - Or download directly from [WinLibs](https://winlibs.com/) (easier)
+   - Choose the latest release (UCRT runtime, Win32 threads)
+
+2. **Install MinGW-w64:**
+
+   - Extract the downloaded archive to `C:\mingw64`
+   - Add `C:\mingw64\bin` to your system PATH:
+     - Open "Environment Variables" in Windows
+     - Edit "Path" under System Variables
+     - Add new entry: `C:\mingw64\bin`
+     - Click OK
+
+3. **Verify Installation:**
+   ```powershell
+   g++ --version
+   ```
+   You should see the compiler version information.
+
+#### Option 2: Visual Studio Build Tools
+
+1. Download [Visual Studio Build Tools](https://visualstudio.microsoft.com/downloads/)
+2. Install "Desktop development with C++" workload
+3. Use the Developer Command Prompt to compile
+
+#### Option 3: Use the Pre-compiled Server
+
+If you don't want to install a compiler, you can use the included `server.exe` file directly (skip to Step 2).
+
+---
+
 ### Step 1: Compile the C++ Server
 
 **Using g++ (MinGW on Windows):**
 
 ```powershell
-g++ server.cpp -o server.exe -lws2_32
+g++ backend\server.cpp -o server.exe -lws2_32
+```
+
+**Or use the build script:**
+
+```powershell
+.\build.bat
 ```
 
 **Using Visual Studio:**
 
 1. Create a new "Console Application" project
-2. Add `server.cpp` to the project
+2. Add `backend\server.cpp` to the project
 3. Build the solution
 
 ### Step 2: Run the Server
@@ -109,14 +154,33 @@ http://localhost:8080
 ```
 simpcalcu/
 │
-├── server.cpp                # C++ HTTP server with calculation logic
-├── index.html               # Web interface (served by C++ server)
-├── styles.css               # Styling with dark/light mode support
-├── script.js                # Client-side logic and interactions
-├── README.md                # This file
-├── UPDATES.md               # Changelog and update history
-└── VALIDATION-FEATURES.md   # Input validation documentation
+├── frontend/                    # Client-side files
+│   ├── index.html              # Main HTML file
+│   ├── css/
+│   │   └── styles.css          # Stylesheet with dark/light mode
+│   └── js/
+│       └── script.js           # Client-side JavaScript logic
+│
+├── backend/                     # Server-side files
+│   └── server.cpp              # C++ HTTP server
+│
+├── assets/                      # Static assets
+│   ├── images/
+│   │   └── finallogoforsimplegains.png    # Application logo
+│   └── videos/
+│       └── bg.mp4              # Loading screen video
+│
+├── docs/                        # Documentation
+│   ├── UPDATES.md              # Changelog
+│   └── VALIDATION-FEATURES.md  # Validation documentation
+│
+├── server.exe                   # Compiled server executable
+├── build.bat                    # Build script for Windows
+├── README.md                    # This file
+└── PROJECT-STRUCTURE.md         # Project organization guide
 ```
+
+> See [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md) for detailed information about the project organization.
 
 ## 🎯 How to Use
 

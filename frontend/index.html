@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SimpleGains - Simple Interest Calculator</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="../assets/images/finallogoforsimplegains.png"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+      <div class="loading-content">
+        <video autoplay muted playsinline class="loading-video">
+          <source src="../assets/videos/bg.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+
+    <!-- Header Section (Separate from Calculator) -->
+    <header class="site-header">
+      <div class="header-container">
+        <img
+          src="../assets/images/finallogoforsimplegains.png"
+          alt="SimplGains Logo"
+          class="header-logo"
+        />
+        <div class="header-brand">
+          <h1 class="brand-name">SimpleGains</h1>
+          <p class="brand-tagline">Simple Interest, Simply Calculated</p>
+        </div>
+
+        <div class="header-actions">
+          <button class="header-btn" id="presetsBtn" title="Quick Presets">
+            <span class="btn-icon">⚡</span>
+            <span class="btn-label">Presets</span>
+          </button>
+          <button
+            class="header-btn theme-toggle"
+            id="themeToggle"
+            title="Toggle Theme"
+          >
+            <span class="btn-icon theme-icon">🌙</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Bento 1: Info -->
+      <div class="bento-info">
+        <div class="info-header">
+          <div>
+            <h2>Calculator Information</h2>
+          </div>
+        </div>
+
+        <div class="formula" id="formulaDisplay">A = P(1 + rt)</div>
+
+        <div class="info-description">
+          <p><strong>Calculate Simple & Compound Interest</strong></p>
+          <p>
+            Enter your principal amount, interest rate, time period, and
+            compounding frequency to see how your investment grows over time.
+          </p>
+        </div>
+      </div>
+
+      <!-- Bento 2: Input -->
+      <div class="bento-input">
+        <div class="input-header">
+          <h2>📝 Input Values</h2>
+          <p class="input-hint">
+            Fill in the details below to calculate your interest
+          </p>
+        </div>
+
+        <form id="calculatorForm">
+          <div class="form-group">
+            <label for="principal">
+              Principal Amount (P)
+              <span class="hint">Initial amount invested</span>
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="principal"
+                name="principal"
+                step="1"
+                min="0"
+                placeholder="e.g., 1000"
+                required
+              />
+              <span class="input-suffix">$</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="rate">
+              Interest Rate (r)
+              <span class="hint">Annual interest rate</span>
+            </label>
+            <div class="input-with-toggle">
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="rate"
+                  name="rate"
+                  step="0.01"
+                  min="0"
+                  placeholder="e.g., 5"
+                  required
+                />
+                <span class="input-suffix" id="rateSuffix">%</span>
+              </div>
+              <button
+                type="button"
+                class="percentage-toggle active"
+                id="percentageToggle"
+              >
+                % Mode
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="time">
+              Time Period (t)
+              <span class="hint">Investment duration</span>
+            </label>
+            <div class="input-with-toggle">
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="time"
+                  name="time"
+                  step="1"
+                  min="0"
+                  placeholder="e.g., 3"
+                  required
+                />
+              </div>
+              <select id="timeUnit" class="time-unit-select">
+                <option value="year">per year</option>
+                <option value="month">per month</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="compounding">
+              Compounding Period
+              <span class="hint">How often interest is calculated</span>
+            </label>
+            <select id="compounding" name="compounding" required>
+              <option value="0">Simple Interest (No Compounding)</option>
+              <option value="1">Annual (Once per year)</option>
+              <option value="2">Semi-Annual (Twice per year)</option>
+              <option value="4">Quarterly (4 times per year)</option>
+              <option value="12">Monthly (12 times per year)</option>
+            </select>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn-calculate">Calculate</button>
+            <button type="button" class="btn-clear" onclick="clearForm()">
+              Clear
+            </button>
+          </div>
+        </form>
+
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <p style="margin-top: 10px">Calculating...</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+      </div>
+
+      <!-- Bento 3: Output -->
+      <div class="bento-output">
+        <div class="output-header">
+          <h2>📊 Results</h2>
+          <p class="output-hint">Your calculation results will appear here</p>
+        </div>
+
+        <div class="result-container" id="resultContainer">
+          <div class="result-empty" id="resultEmpty">
+            <div class="empty-icon">📈</div>
+            <p>Calculate your interest to see results</p>
+          </div>
+
+          <div class="result-content" id="resultContent" style="display: none">
+            <!-- Tab Navigation -->
+            <div class="result-tabs">
+              <button class="result-tab active" data-tab="summary">
+                <span class="tab-icon">📊</span>
+                <span class="tab-label">Summary</span>
+              </button>
+              <button class="result-tab" data-tab="schedule">
+                <span class="tab-icon">📅</span>
+                <span class="tab-label">Schedule</span>
+              </button>
+              <button class="result-tab" data-tab="chart">
+                <span class="tab-icon">📈</span>
+                <span class="tab-label">Chart</span>
+              </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content-container">
+              <!-- Summary Tab -->
+              <div class="tab-content active" id="summaryTab">
+                <div class="result-summary">
+                  <div class="summary-label">Total Amount</div>
+                  <div class="summary-value" id="resultAmountLarge">$0.00</div>
+                </div>
+
+                <div class="result-breakdown">
+                  <div class="breakdown-title">Breakdown</div>
+
+                  <div class="result-item">
+                    <span class="result-label">Principal Amount:</span>
+                    <span class="result-value" id="resultPrincipal">$0.00</span>
+                  </div>
+                  <div class="result-item">
+                    <span class="result-label">Interest Rate:</span>
+                    <span class="result-value" id="resultRate">0%</span>
+                  </div>
+                  <div class="result-item">
+                    <span class="result-label">Time Period:</span>
+                    <span class="result-value" id="resultTime">0 years</span>
+                  </div>
+                  <div class="result-item">
+                    <span class="result-label">Compounding:</span>
+                    <span class="result-value" id="resultCompounding"
+                      >Simple</span
+                    >
+                  </div>
+                  <div class="result-item highlight">
+                    <span class="result-label">Interest Earned:</span>
+                    <span class="result-value" id="resultInterest">$0.00</span>
+                  </div>
+                </div>
+
+                <div class="result-visual">
+                  <div class="visual-title">Principal vs Interest</div>
+                  <div class="visual-bar">
+                    <div
+                      class="visual-principal"
+                      id="visualPrincipal"
+                      style="width: 50%"
+                    >
+                      <span>Principal</span>
+                    </div>
+                    <div
+                      class="visual-interest"
+                      id="visualInterest"
+                      style="width: 50%"
+                    >
+                      <span>Interest</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Schedule Tab -->
+              <div class="tab-content" id="scheduleTab">
+                <div class="schedule-header">
+                  <h3>Amortization Schedule</h3>
+                  <p class="schedule-subtitle">
+                    Period-by-period breakdown of your investment
+                  </p>
+                </div>
+                <div class="schedule-table-container">
+                  <table class="schedule-table">
+                    <thead>
+                      <tr>
+                        <th>Period</th>
+                        <th>Principal</th>
+                        <th>Interest</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody id="scheduleTableBody">
+                      <tr>
+                        <td colspan="4" class="schedule-empty">
+                          Calculate to view schedule
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Chart Tab -->
+              <div class="tab-content" id="chartTab">
+                <div class="chart-header">
+                  <h3>Growth Timeline</h3>
+                  <p class="chart-subtitle">
+                    Visual representation of your investment growth over time
+                  </p>
+                </div>
+                <div class="chart-container">
+                  <canvas id="growthChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          SimpleGains © 2025 | Powered by C++ Backend Server | localhost:8080
+        </div>
+      </div>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div id="tutorialOverlay" class="tutorial-overlay" style="display: none">
+      <div class="tutorial-spotlight"></div>
+      <div class="tutorial-tooltip">
+        <div class="tutorial-header">
+          <h3 id="tutorialTitle">Welcome to SimpleGains!</h3>
+          <button class="tutorial-close" id="tutorialClose">×</button>
+        </div>
+        <div class="tutorial-content">
+          <p id="tutorialText">
+            Let's take a quick tour to help you get started with calculating
+            interest.
+          </p>
+        </div>
+        <div class="tutorial-footer">
+          <span class="tutorial-step-counter" id="tutorialCounter">1 / 8</span>
+          <div class="tutorial-buttons">
+            <button class="tutorial-btn tutorial-btn-skip" id="tutorialSkip">
+              Skip Tour
+            </button>
+            <button
+              class="tutorial-btn tutorial-btn-prev"
+              id="tutorialPrev"
+              style="display: none"
+            >
+              Previous
+            </button>
+            <button class="tutorial-btn tutorial-btn-next" id="tutorialNext">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settingsModal">
+      <div class="settings-content">
+        <div class="settings-header">
+          <h2>⚙️ Settings</h2>
+          <button class="settings-close" id="settingsClose">✕</button>
+        </div>
+
+        <div class="settings-body">
+          <!-- Display Section -->
+          <div class="settings-section">
+            <h3 class="settings-section-title">Display Preferences</h3>
+
+            <div class="settings-item">
+              <label for="decimalPlaces">Decimal Places</label>
+              <select id="decimalPlaces" class="settings-select">
+                <option value="2" selected>2 decimals (1,234.56)</option>
+                <option value="4">4 decimals (1,234.5678)</option>
+                <option value="6">6 decimals (1,234.567890)</option>
+              </select>
+            </div>
+
+            <div class="settings-item">
+              <label for="currencySymbol">Currency Symbol</label>
+              <select id="currencySymbol" class="settings-select">
+                <option value="$" selected>$ (Dollar)</option>
+                <option value="€">€ (Euro)</option>
+                <option value="£">£ (Pound)</option>
+                <option value="¥">¥ (Yen)</option>
+                <option value="₱">₱ (Peso)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Calculator Defaults Section -->
+          <div class="settings-section">
+            <h3 class="settings-section-title">Calculator Defaults</h3>
+
+            <div class="settings-item">
+              <label for="defaultCompounding">Default Compounding</label>
+              <select id="defaultCompounding" class="settings-select">
+                <option value="0" selected>Simple Interest</option>
+                <option value="1">Annual</option>
+                <option value="2">Semi-Annual</option>
+                <option value="4">Quarterly</option>
+                <option value="12">Monthly</option>
+              </select>
+            </div>
+
+            <div class="settings-item">
+              <label for="defaultTimeUnit">Default Time Unit</label>
+              <select id="defaultTimeUnit" class="settings-select">
+                <option value="year" selected>Years</option>
+                <option value="month">Months</option>
+              </select>
+            </div>
+
+            <div class="settings-item">
+              <label for="defaultRateMode">Default Rate Mode</label>
+              <select id="defaultRateMode" class="settings-select">
+                <option value="percentage" selected>Percentage (%)</option>
+                <option value="decimal">Decimal (0.05)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Data Management Section -->
+          <div class="settings-section">
+            <h3 class="settings-section-title">Data Management</h3>
+
+            <div class="settings-item">
+              <label class="settings-toggle">
+                <input type="checkbox" id="autoSaveHistory" checked />
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Auto-save calculation history</span>
+              </label>
+            </div>
+
+            <div class="settings-item">
+              <button class="settings-danger-btn" id="clearAllDataBtn">
+                🗑️ Clear All Data & Reset
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-footer">
+          <button class="settings-cancel-btn" id="settingsCancelBtn">
+            Cancel
+          </button>
+          <button class="settings-save-btn" id="settingsSaveBtn">
+            Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating History Button -->
+    <button
+      class="floating-history-btn"
+      id="floatingHistoryBtn"
+      title="View History"
+    >
+      📜
+      <span class="history-badge" id="historyBadge">0</span>
+    </button>
+
+    <!-- History Popover -->
+    <div class="history-popover" id="historyPopover">
+      <div class="history-popover-header">
+        <h3>📜 Recent Calculations</h3>
+      </div>
+      <div class="history-popover-content" id="historyPopoverContent">
+        <div class="history-empty" id="historyEmpty">
+          <p>No calculations yet</p>
+          <p class="hint">Calculate to see your history here</p>
+        </div>
+        <div class="history-list" id="historyList" style="display: none">
+          <!-- History items will be added here -->
+        </div>
+      </div>
+      <div class="history-popover-footer">
+        <button class="clear-history-btn" id="clearHistoryBtn">
+          Clear All
+        </button>
+      </div>
+    </div>
+
+    <!-- Custom Confirmation Modal -->
+    <div class="confirm-modal" id="confirmModal" style="display: none">
+      <div class="confirm-modal-content">
+        <h3 id="confirmTitle">Confirm Action</h3>
+        <p id="confirmMessage">Are you sure?</p>
+        <div class="confirm-modal-buttons">
+          <button class="confirm-btn confirm-btn-cancel" id="confirmCancel">
+            Cancel
+          </button>
+          <button class="confirm-btn confirm-btn-ok" id="confirmOk">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Presets Modal -->
+    <div class="presets-modal" id="presetsModal" style="display: none">
+      <div class="presets-modal-content">
+        <div class="presets-header">
+          <h3>⚡ Quick Presets</h3>
+          <button class="presets-close" id="presetsClose">✕</button>
+        </div>
+        <div class="presets-body">
+          <div class="preset-card" data-preset="savings">
+            <div class="preset-icon">💰</div>
+            <h4>Savings Account</h4>
+            <p>Typical savings account scenario</p>
+            <div class="preset-values">
+              Principal: $10,000 | Rate: 2.5% | Time: 5 years
+            </div>
+          </div>
+          <div class="preset-card" data-preset="loan">
+            <div class="preset-icon">🏠</div>
+            <h4>Personal Loan</h4>
+            <p>Common personal loan calculation</p>
+            <div class="preset-values">
+              Principal: $25,000 | Rate: 7% | Time: 3 years
+            </div>
+          </div>
+          <div class="preset-card" data-preset="investment">
+            <div class="preset-icon">📈</div>
+            <h4>Short Investment</h4>
+            <p>Quick investment returns</p>
+            <div class="preset-values">
+              Principal: $5,000 | Rate: 4% | Time: 2 years
+            </div>
+          </div>
+          <div class="preset-card" data-preset="emergency">
+            <div class="preset-icon">🚨</div>
+            <h4>Emergency Fund</h4>
+            <p>Build your safety net</p>
+            <div class="preset-values">
+              Principal: $15,000 | Rate: 3% | Time: 1 year
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
