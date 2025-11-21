@@ -52,7 +52,7 @@ Where:
 - ✅ Month/Year mode for time period input
 - ✅ **Multiple Result Tabs:**
   - 📊 Summary - Quick overview of results
-  - 📅 Schedule - Detailed amortization schedule
+  - 📅 Schedule - Detailed growth schedule
   - 📈 Chart - Visual representation with Chart.js
 - ✅ **Principal vs Interest** visual bar chart
 - ✅ **Calculation History** with localStorage
