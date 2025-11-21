@@ -943,7 +943,7 @@ function displayResult(result) {
 
   // Display the large amount
   document.getElementById("resultAmountLarge").textContent =
-    currency + result.amount.toFixed(decimals);
+    currency + result.amount.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
 
   document.getElementById("resultPrincipal").textContent =
     currency + result.principal.toFixed(decimals);
