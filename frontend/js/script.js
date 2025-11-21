@@ -390,6 +390,11 @@ if (settingsModal) {
 // Load settings on page load
 loadSettings();
 
+// Update footer with dynamic server host
+if (document.getElementById('serverHost')) {
+  document.getElementById('serverHost').textContent = window.location.host || 'localhost:8080';
+}
+
 // ============================================
 // TUTORIAL BUTTON
 // ============================================
@@ -427,7 +432,7 @@ resultTabs.forEach(tab => {
 });
 
 // ============================================
-// AMORTIZATION SCHEDULE GENERATION
+// GROWTH SCHEDULE GENERATION
 // ============================================
 function generateSchedule(result) {
   const tableBody = document.getElementById('scheduleTableBody');
@@ -978,7 +983,7 @@ function displayResult(result) {
   // Store current calculation globally for chart rendering
   window.currentCalculation = result;
   
-  // Generate amortization schedule
+  // Generate growth schedule
   generateSchedule(result);
   
   // If chart tab is active, render chart immediately
